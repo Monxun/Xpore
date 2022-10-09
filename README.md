@@ -1,5 +1,5 @@
 # Xpore
-Team Bootstrapper / Client CLI
+Kaggle Team Bootstrapper / Cycledelic Client CLI
 
 ![DATASCIENCE WORKFLOW](./xpore-dashboard.png?raw=true)
 
