@@ -1,0 +1,69 @@
+---
+
+# SETUP ENVIRONMENT | ../scripts/linux/setup-environment.sh
+- name: "SECTION 1 - SETUP | Run setup script"
+  sh: |
+    bash -l {{ playbook_dir }}/scripts/linux/setup-environment.sh
+
+# GENERATE DEPLOYMENT FROM TEMPLATES | .env  docker-compose.yml Dockerfile
+- name: "SECTION 1 - TEMPLATE | Generate docker-compose.yml"
+  template:
+    src: "{{ role_path }}/templates/docker-compose.yml.j2"
+    dest: "{{ docker_path }}/docker-compose.yml"
+
+- name: "SECTION 1 - TEMPLATE | Generate .env file"
+  template:
+    src: "{{ role_path }}/templates/.env.j2"
+    dest: "{{ docker_path }}/.env"
+
+# COPY HOMER DIR TO ~/cycledelic.../volumes
+- name: "SECTION 1 - COPY | Copy homer directory"
+  sh: |
+    yes | cp -rf {{ playbook_dir }}/files/homer {{ local_volumes_path }}/homer
+
+# DEPLOY FROM FILES IN TMP DIR | .env  docker-compose.yml Dockerfile
+- name: "SECTION 1 - DEPLOY | Ensure Docker Cluster containers are built from the Docker-Compose yml file."
+  community.docker.docker_compose:
+    project_src: "{{ docker_path }}"
+    state: absent
+
+- name: "SECTION 1 - DEPLOY | Ensure the container cluster is running."
+  community.docker.docker_compose:
+    project_src: "{{ docker_path }}"
+  register: output
+
+# PERFORM HEALTHCHECKS 
+
+
+# SETUP BUCKET AND GRAB API KEY FOR INFLUXDB
+
+
+# CREATE POSTGRES DATABASE
+
+
+---
+# INSTALL DEPENDENCIES ////////////////////////////////////////////////////////////////////////
+- name: Install multi python packages with version specifiers
+  ansible.builtin.pip:
+    name:
+      "{{python_dependencies}}"
+# DEPLOY DOCKER-COMPOSE ////////////////////////////////////////////////////////////////////////////////
+- name: "SECTION 1 - TEMPLATE | Generate docker-compose.yml"
+  template:
+    src: "{{ role_path }}/templates/docker-compose.yml.j2"
+    dest: "{{ playbook_dir }}/tmp/docker-compose.yml"
+
+- name: "SECTION 1 - TEMPLATE | Generate .env file"
+  template:
+    src: "{{ role_path }}/templates/.env.j2"
+    dest: "{{ playbook_dir }}/tmp/.env"
+
+- name: "SECTION 1 - DEPLOY | Ensure Docker Cluster containers are built from the Docker-Compose yml file."
+  community.docker.docker_compose:
+    project_src: "{{role_path}}/files/docker"
+    state: absent
+
+- name: "SECTION 1 - DEPLOY | Ensure the container cluster is running."
+  community.docker.docker_compose:
+    project_src: "{{role_path}}/files/docker"
+  register: output

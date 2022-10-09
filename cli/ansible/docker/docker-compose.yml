@@ -1,0 +1,56 @@
+version: '3.9'
+
+volumes:
+  influxdb:
+  influxdb2:
+  postgres-storage:
+  grafana-storage:
+
+networks:
+  cycledelic-network:
+
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    networks:
+      - cycledelic-network
+  influxdb:
+      container_name: influxdb
+      image: influxdb:latest
+      ports:
+        - '8086:8086'
+      volumes:
+        - influxdb:/var/lib/influxdb
+        - influxdb2:/var/lib/influxdb2
+      env_file: ./.env
+      networks:
+      - cycledelic-network
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file: ./.env
+    volumes: 
+      - postgres-storage:/var/lib/postgresql/data
+    networks:
+      - cycledelic-network
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 7080:8080
+    env_file: ./.env
+    networks:
+      - cycledelic-network
+    

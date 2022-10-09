@@ -1,0 +1,90 @@
+version: '3.9'
+
+volumes:
+  influxdb:
+  influxdb2:
+  postgres-storage:
+  grafana-storage:
+
+networks:
+  {{network_name}}:
+
+services:
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    restart: always
+    volumes:
+      - {{local_volumes_path}}/homer/assets/:/www/assets
+    ports:
+      - "{{homer_port}}:8080"
+    user: 1000:1000 # default
+    environment:
+      - INIT_ASSETS=1 # default
+    networks:
+      - {{network_name}}
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{local_volumes_path}}/portainer/data:/data
+    ports:
+      - "{{portainer_port}}:9000"
+    networks:
+      - {{network_name}}
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    restart: always
+    ports:
+      - "{{grafana_port}}:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - {{local_volumes_path}}/grafana/grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    env_file: ./.env
+    networks:
+      - {{network_name}}
+
+  influxdb:
+      container_name: influxdb
+      image: influxdb:latest
+      restart: always
+      ports:
+        - "{{influxdb_port}}:8086"
+      volumes:
+        - influxdb:/var/lib/influxdb
+        - influxdb2:/var/lib/influxdb2
+      env_file: ./.env
+      networks:
+      - {{network_name}}
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    ports:
+      - "{{postgres_port}}:5432"
+    env_file: ./.env
+    volumes: 
+      - postgres-storage:/var/lib/postgresql/data
+    networks:
+      - {{network_name}}
+      
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - "{{adminer_port}}:8080"
+    env_file: ./.env
+    networks:
+      - {{network_name}}

@@ -1,0 +1,46 @@
+---
+# //////////////////////////////////////////////////////////////////
+# CREDENTIALS
+#///////////////////////////////////////////////////////////////////
+
+# USER CREDENTIALS FOR ALL LOCAL SERVICES / DB
+user_name: my-username
+user_password: my-password
+
+kaggle_username: my-kaggle-username
+kaggle_secret_key: my-kaggle-password
+
+
+# ///////////////////////////////////////////////////////////////////
+# CONFIGURATION
+#///////////////////////////////////////////////////////////////////
+
+# DOCKER-COMPOSE NETWORK NAME
+network_name: cycledelic
+
+# DOCKER PORTS
+xpore_port: 8444
+homer_port: 3444
+grafana_port: 3000
+influxdb_port: 8086
+postgres_port: 5432
+minio_port: 
+adminer_port: 7080
+
+# XPORE
+
+
+# GRAFANA
+
+
+# INFLUXDB
+influxdb_bucket_name: cycledelic
+
+# POSTGRES
+
+
+# MINIO
+
+
+# ADMINER
+adminer_theme: dracula

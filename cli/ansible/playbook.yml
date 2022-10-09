@@ -1,0 +1,49 @@
+---
+- hosts: localhost
+  become: true
+
+# ////////////////////////////////////////////////////////////////////////////////////////
+#  VARIABLES
+# ////////////////////////////////////////////////////////////////////////////////////////
+  vars_files:
+  - "./vars/user_settings.yml"
+
+  # DO NOT EDIT local_path OR local_volumes_path
+  - docker_path: ~/cycledelic/xpore/docker
+  - local_volumes_path: ~/cycledelic/xpore/docker/volumes
+
+  environment:
+    # DATA_PATH: "{{ playbook_dir  }}/data"
+    
+
+# ////////////////////////////////////////////////////////////////////////////////////////
+#  TASKS
+# ////////////////////////////////////////////////////////////////////////////////////////
+  tasks:
+    
+    # INIT | //////////////////////////
+    - name: RUN DEPLOY XPORE INIT ROLE
+      include_role:
+        name: init
+      tags:
+          - init
+
+    # UP | ///////////////////////////
+    - name: RUN DEPLOY XPORE UP ROLE
+      sh: |
+        cd {{ docker_path }}
+        docker-compose up -d
+      tags:
+          - up
+
+
+    # DOWN | /////////////////////////
+    - name: RUN DEPLOY XPORE UP ROLE
+      sh: |
+        cd {{ docker_path }}
+        docker-compose down
+      tags:
+          - down
+      
+
+    

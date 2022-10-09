@@ -1,0 +1,33 @@
+# DO NOT EDIT local_path OR local_volumes_path
+docker_path: ~/cycledelic/xpore/docker
+local_volumes_path: ~/cycledelic/xpore/docker/volumes
+
+# DOCKER-COMPOSE NETWORK NAME
+network_name: cycledelic
+
+# DOCKER PORTS
+xpore_port: 8444
+homer_port: 3444
+grafana_port: 3000
+influxdb_port: 8086
+postgres_port: 5432
+minio_port: 
+adminer_port: 7080
+
+# XPORE
+
+
+# GRAFANA
+
+
+# INFLUXDB
+influxdb_bucket_name: cycledelic
+
+# POSTGRES
+
+
+# MINIO
+
+
+# ADMINER
+adminer_theme: dracula

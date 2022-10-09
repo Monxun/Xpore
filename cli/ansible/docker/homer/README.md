@@ -1,0 +1,18 @@
+# HOMER XPORE DASHBOARD
+
+
+[Docker-Compose Example]
+
+`---
+version: "2"
+services:
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - ./assets/:/www/assets
+    ports:
+      - 3444:8080
+    user: 1000:1000 # default
+    environment:
+      - INIT_ASSETS=1 # default`
